@@ -19,7 +19,11 @@
 				+ " STU_DEPT = '" + stuDept + "'"
 				+ " WHERE STU_NO = '" + stuNo + "'";
 		int result = stmt.executeUpdate(sql);
-		out.println("저장되었습니다");
+		if(result>0){
+			out.println("저장되었습니다");
+		} else {
+			out.println("저장실패!");
+		}
 		out.println("<button onclick='fnBack()'>되돌아가기</button>");
 	}catch(SQLException e){
 		out.println(e.getMessage());

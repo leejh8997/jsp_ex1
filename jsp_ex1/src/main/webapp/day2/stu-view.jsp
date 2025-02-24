@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="stu-update.jsp" name="update">
+	<form action="stu-update.jsp" >
 	<%
 	String stuNo = request.getParameter("stuNo");
 	rs = stmt.executeQuery(

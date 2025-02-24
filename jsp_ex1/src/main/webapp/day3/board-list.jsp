@@ -75,13 +75,16 @@ th {
 		int pageList = (int) Math.ceil((double)total/pageSize);
 		// ceil(올림), round(반올림), floor(내림)
 		int offset = ((currentPage-1)*pageSize);
-		String sql = "SELECT BOARDNO, TITLE, USERID, CNT, TO_CHAR(CDATETIME,'YYYY-MM-DD') AS CDATETIME FROM BOARD"
-				+" OFFSET "+ offset +" ROWS FETCH NEXT "+ pageSize + " ROWS ONLY";
+		String sql = "SELECT B.BOARDNO, B.TITLE, USERID, CNT, TO_CHAR(B.CDATETIME,'YYYY-MM-DD') AS CDATETIME, CMTCNT"
+				+ " FROM BOARD B"
+				+ " LEFT JOIN("
+				+ " SELECT B.BOARDNO, COUNT(B.BOARDNO) AS CMTCNT"
+				+ " FROM BOARD B"
+				+ " INNER JOIN BOARD_COMMENT C ON B.BOARDNO = C.BOARDNO"
+				+ " GROUP BY B.BOARDNO) T ON B.BOARDNO = T.BOARDNO"
+				+ " ORDER BY B.BOARDNO"
+				+ " OFFSET "+ offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
 		rs = stmt.executeQuery(sql);
-		
-		
-		
-
 		try {
 			while (rs.next()) {
 		%>
@@ -89,7 +92,12 @@ th {
 			<td><%=rs.getString("BOARDNO")%></td>
 			<td>
 				<%=rs.getString("TITLE")%>
-				<% %>
+				<% 
+					
+					if(rs.getString("CMTCNT") != null){
+						out.println(" ("+rs.getString("CMTCNT")+")");
+					}
+				%>
 			</td>
 			<td><%=rs.getString("USERID")%></td>
 			<td><%=rs.getString("CNT")%></td>

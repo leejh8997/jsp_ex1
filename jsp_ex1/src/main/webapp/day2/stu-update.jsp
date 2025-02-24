@@ -11,7 +11,7 @@
 </style>
 </head>
 <body>
-	<form action="stu-update-result.jsp" method="get" name="update">
+	<form action="stu-update-result.jsp">
 		<%
 		String stuNo = request.getParameter("stuNo");
 		rs = stmt.executeQuery("SELECT * FROM STUDENT WHERE STU_NO = '" + stuNo +"'");
